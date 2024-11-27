@@ -38,16 +38,18 @@ public class PetService {
         userService.getUserById(petForDelete.userId()).pets().remove(petForDelete);
     }
 
-    public Pet updatePet(Pet pet) {
+    public Pet updatePet(Long id, Pet pet) {
         if (pet.id() == null) {
             throw new IllegalArgumentException("Pet id is null");
         }
+
         Pet foundPet = findPetById(pet.id());
         Pet petToUpdate = new Pet(
-                pet.id(),
+                id,
                 pet.name(),
                 pet.userId()
         );
+
         User user = userService.getUserById(pet.userId());
         user.pets().remove(foundPet);
         user.pets().add(petToUpdate);

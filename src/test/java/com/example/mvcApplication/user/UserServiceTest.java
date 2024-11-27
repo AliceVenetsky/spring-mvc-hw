@@ -58,7 +58,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void shouldSuccessSearchBookById() throws Exception {
+    void shouldSuccessSearchUserById() throws Exception {
         var user = new User(
                 null,
                 "AlexV",

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class PetController {
     private final PetService petService;
     private final ObjectToDtoConverter converter;
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final Logger log = LoggerFactory.getLogger(PetController.class);
 
 
     public PetController(PetService petService, ObjectToDtoConverter converter) {
@@ -45,7 +45,7 @@ public class PetController {
     }
 
     @DeleteMapping("/{petId}")
-    public ResponseEntity<Void> deleteUser(
+    public ResponseEntity<Void> deletePet(
             @PathVariable("petId") Long petId
     ) {
         petService.deletePet(petId);
@@ -57,10 +57,10 @@ public class PetController {
     }
 
     @PutMapping("/{petId}")
-    public ResponseEntity<PetDto> updateUser(
+    public ResponseEntity<PetDto> updatePet(
             @PathVariable("petId") Long petId,
             @RequestBody PetDto petDto) {
-        var pet = petService.updatePet(converter.toPetObject(petDto));
+        var pet = petService.updatePet(petId, converter.toPetObject(petDto));
 
         log.info("Get request to update Pet with id = {}", pet);
         return ResponseEntity

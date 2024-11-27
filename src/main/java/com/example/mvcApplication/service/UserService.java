@@ -47,9 +47,14 @@ public class UserService {
     }
 
     public User updateUser(Long id, User userToUpdate) {
-        if (userMap.get(id) == null) {
+        if(id == null) {
+            throw new IllegalArgumentException("No user id passed");
+        }
+
+        if (userMap.containsKey(id)) {
             throw new NoSuchElementException("No found user by id = %s".formatted(id));
         }
+
         var updatedUser = new User(
                 id,
                 userToUpdate.name(),
@@ -57,6 +62,7 @@ public class UserService {
                 userToUpdate.age(),
                 userToUpdate.pets()
         );
+
         userMap.put(id, userToUpdate);
         return updatedUser;
     }

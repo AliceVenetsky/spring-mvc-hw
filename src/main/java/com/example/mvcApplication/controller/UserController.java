@@ -64,6 +64,7 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(
             @PathVariable("userId") Long userId,
             @RequestBody UserDto userDto) {
+
         var user = userService.updateUser(userId, converter.toUserObject(userDto));
 
         log.info("Get request for update User with id = {}", userId);

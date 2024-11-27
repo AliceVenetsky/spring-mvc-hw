@@ -22,18 +22,15 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException.class,
             IllegalArgumentException.class
     })
-    public ResponseEntity<ServerErrorDto> handleBadRequestException(MethodArgumentNotValidException e) {
+    public ResponseEntity<ServerErrorDto> handleBadRequestException(Exception e) {
         log.error("Got exception", e);
 
-        String detailedMessage = e.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .collect(Collectors.joining(", "));
 
         var errorDto = new ServerErrorDto(
-                "Validation error",
-                detailedMessage,
+                "Bad request",
+                (e instanceof MethodArgumentNotValidException)?
+                        getValidationExceptionMessage((MethodArgumentNotValidException)e)
+                        :e.getMessage(),
                 LocalDateTime.now());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -62,5 +59,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(errorDto);
+    }
+
+    private String getValidationExceptionMessage(MethodArgumentNotValidException e) {
+          String detailedMessage = e.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+          return detailedMessage;
     }
 }
